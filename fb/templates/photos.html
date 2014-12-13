@@ -12,7 +12,9 @@
     <br>
     {% for photo in photos.all %}
         <img width="200px" src="{{ photo.photo.url }}"/>
+        {% if user == photo.album.user %}
         <a class="btn btn-primary btn-like" href="{% url 'delete' user.username photo.pk  %}">Delete Photo</a>
+        {% endif %}
         <br>
     {% endfor %}
 
