@@ -11,9 +11,13 @@
          <div class="media-body">
             <h4 class="media-heading">
                <a href="{% url 'profile' u.username %}">
-                  <b>{{ u.username }}</b>
+                  <b>{{ u.username }}</b></a>
                   {% if u != user %}
-                     <a class="btn btn-primary btn-like" href="{% url 'invite_view' u.pk %}">Add friend</a>
+                       {% if u in user.profile.friends.all %}
+                          Already friend 
+                       {% else %}
+                          <a class="btn btn-primary btn-like" href="{% url 'invite_view' u.pk %}">Add friend</a>
+                       {% endif %}
                   {% endif %}
                </a>
             </h4>
