@@ -190,3 +190,16 @@ def view_friends(request):
         }
     
     return render(request, 'view_friends.html', context)
+
+
+@login_required
+def delete_post_view(request, pk):
+    post = UserPost.objects.get(pk=pk)
+    post.delete()
+    return redirect(reverse('index'))
+
+def delete_comment_view(request, pk):
+    comment = UserPostComment.objects.get(pk=pk)
+    comment.delete()
+    return redirect(reverse('index'))
+

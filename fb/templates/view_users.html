@@ -11,7 +11,8 @@
          <div class="media-body">
             <h4 class="media-heading">
                <a href="{% url 'profile' u.username %}">
-                  <b>{{ u.username }}</b></a>
+                  <b>{{ u.username }}</b>
+               </a>
                   {% if u != user %}
                        {% if u in user.profile.friends.all %}
                           <a class="btn btn-primary btn-like" href="{% url 'delete_view' u.pk %}">Delete friend</a> 
@@ -19,7 +20,6 @@
                           <a class="btn btn-primary btn-like" href="{% url 'invite_view' u.pk %}">Add friend</a>
                        {% endif %}
                   {% endif %}
-               </a>
             </h4>
           </div>
         </div>

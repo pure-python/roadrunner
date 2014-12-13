@@ -7,6 +7,10 @@
   <br>
 
   <a class="btn btn-primary btn-like" href="{% url 'like' post.pk %}">Like</a>
+  {% if post.author == user %}
+    <a class="btn btn-primary btn-like" href="{% url 'delete_post' post.pk %}">Delete</a>
+  {% endif %}
+  
   
   {% if post.likers.count %}
   Who likes this:
@@ -30,6 +34,9 @@
       <div class="media-body">
         <b>{{ comment.author }}</b>: {{ comment.text }}
       </div>
+      {% if comment.author == user %}
+         <a class="btn btn-primary btn-like" href="{% url 'delete_comment' comment.pk %}">Delete comment</a>
+      {% endif %}
     </div>
   {% endfor %}
   </div>
