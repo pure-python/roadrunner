@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.db.utils import OperationalError
 from django.dispatch import receiver
 from django.templatetags.static import static
 from django.conf import settings
@@ -56,4 +57,7 @@ class UserProfile(models.Model):
 def callback(sender, instance, *args, **kwargs):
     if not hasattr(instance, 'profile'):
         instance.profile = UserProfile()
-        instance.profile.save()
+        try:
+            instance.profile.save()
+        except OperationalError:
+            pass
