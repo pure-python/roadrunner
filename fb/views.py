@@ -200,6 +200,7 @@ def delete_post_view(request, pk):
 
 def delete_comment_view(request, pk):
     comment = UserPostComment.objects.get(pk=pk)
+    post_pk = comment.post.pk
     comment.delete()
-    return redirect(reverse('index'))
+    return redirect(reverse('post_details',args=[post_pk]))
 
