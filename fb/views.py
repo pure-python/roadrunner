@@ -165,3 +165,14 @@ def invite_view(request,pk):
             'users': users,
         }
     return render(request, 'view_users.html', context)
+
+
+@login_required
+def view_friends(request):
+    friends = request.user.profile.friends.all()
+    if request.method == 'GET':
+        context = {
+            'friends': friends,
+        }
+    
+    return render(request, 'view_friends.html', context)

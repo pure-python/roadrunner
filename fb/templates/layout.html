@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav pull-right">
             <li><a href="{% url 'view_users' %}">All users</a></li>
-            <li><a href="{% url 'view_users' %}">My friends</a></li>
+            <li><a href="{% url 'view_friends' %}">My friends</a></li>
             <li><a href="{% url 'index' %}">News</a></li>
           {% if user.is_authenticated %}
             <li><a href="{% url 'profile' user.username %}">My profile</a></li>
