@@ -20,21 +20,39 @@
 
   <div class="posts">
   {% for post in posts %}
-    <div class="media">
-      <a class="media-left" href="#">
-        <img src="{{ post.author.profile.avatar_url }}">
-      </a>
-      <div class="media-body">
-        <h4 class="media-heading">
-          <a href="{% url 'post_details' post.pk %}">
-          {{ post.text}}
-          </a>
-        </h4>
-        <a href="{% url 'profile' post.author.username %}">
-            <b><small>{{ post.author.username }}</small></b></a>
-        on <b><small>{{ post.date_added }}</small></b>
-      </div>
-    </div>
+    	{% if post.author == user %}
+	    <div class="media">
+	      <a class="media-left" href="#">
+		<img src="{{ post.author.profile.avatar_url }}">
+	      </a>
+	      <div class="media-body">
+		<h4 class="media-heading">
+		  <a href="{% url 'post_details' post.pk %}">
+		  {{ post.text}}
+		  </a>
+		</h4>
+		<a href="{% url 'profile' post.author.username %}">
+		    <b><small>{{ post.author.username }}</small></b></a>
+		on <b><small>{{ post.date_added }}</small></b>
+	      </div>
+	    </div>
+        {% elif post.author in user.profile.friends.all %}
+	    <div class="media">
+	      <a class="media-left" href="#">
+		<img src="{{ post.author.profile.avatar_url }}">
+	      </a>
+	      <div class="media-body">
+		<h4 class="media-heading">
+		  <a href="{% url 'post_details' post.pk %}">
+		  {{ post.text}}
+		  </a>
+		</h4>
+		<a href="{% url 'profile' post.author.username %}">
+		    <b><small>{{ post.author.username }}</small></b></a>
+		on <b><small>{{ post.date_added }}</small></b>
+	      </div>
+	    </div>
+	{% endif %}
   {% endfor %}
   </div>
 {% endblock %}
