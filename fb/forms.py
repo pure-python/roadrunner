@@ -27,4 +27,12 @@ class UserProfileForm(Form):
     gender = ChoiceField(choices=UserProfile.GENDERS, required=False)
     date_of_birth = DateField(required=False)
     avatar = ImageField(required=False)
-   
+
+
+class AlbumForm(Form):
+    album_name = CharField(max_length=100, required=False)
+    album_date = DateField(required=False)
+
+
+class PhotoForm(Form):
+    photo = ImageField(required=False)

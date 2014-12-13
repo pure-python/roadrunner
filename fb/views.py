@@ -6,9 +6,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseForbidden
 from django.contrib.auth.models import User
 
-from fb.models import UserPost, UserPostComment, UserProfile
+from fb.models import UserPost, UserPostComment, UserProfile, Album, Photo
 from fb.forms import (
-    UserPostForm, UserPostCommentForm, UserLogin, UserProfileForm,
+    UserPostForm, UserPostCommentForm, UserLogin, UserProfileForm, AlbumForm, PhotoForm
 )
 
 
@@ -148,7 +148,7 @@ def view_users(request):
         context = {
             'users': users,
         }
-    
+
     return render(request, 'view_users.html', context)
 
 @login_required
@@ -188,7 +188,7 @@ def view_friends(request):
         context = {
             'friends': friends,
         }
-    
+
     return render(request, 'view_friends.html', context)
 
 
@@ -198,9 +198,82 @@ def delete_post_view(request, pk):
     post.delete()
     return redirect(reverse('index'))
 
+
 def delete_comment_view(request, pk):
     comment = UserPostComment.objects.get(pk=pk)
     post_pk = comment.post.pk
     comment.delete()
     return redirect(reverse('post_details',args=[post_pk]))
 
+
+def album_view(request, user):
+    albums = Album.objects.filter(user__username=user)
+    profile = UserProfile.objects.get(user__username=user)
+    context = {
+        'profile': profile,
+        'albums': albums,
+    }
+    return render(request, 'albums.html', context)
+
+
+def new_album_view(request, user):
+    if request.method == 'GET':
+        form = AlbumForm()
+    elif request.method == "POST":
+        form = AlbumForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            album = Album()
+            if cleaned_data['album_name']:
+                album.album_name = cleaned_data['album_name']
+            if cleaned_data['album_date']:
+                album.album_date = cleaned_data['album_date']
+            album.user = User.objects.get(username=user)
+            album.save()
+            return redirect(reverse('albums', args=[user]))
+    context = {
+        'form': form,
+    }
+    return render(request, 'add_album.html', context)
+
+
+def photos_view(request, user, pk):
+    photos = Photo.objects.filter(album__id=pk)
+    context = {
+        'photos': photos,
+
+    }
+    return render(request, 'photos.html', context)
+
+
+def add_photos_view(request, user, pk):
+    album = Album.objects.get(pk=pk)
+    if request.method == 'GET':
+        form = PhotoForm()
+    elif request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            if form.cleaned_data['photo']:
+                photo = Photo(photo=form.cleaned_data['photo'])
+                album.photos.add(photo)
+                photo.save()
+                album.save()
+            return redirect(reverse('photos', args=[user, pk]))
+    context = {
+        'form': form,
+        'photos': album.photos,
+    }
+    return render(request, 'photos.html', context)
+
+
+def delete_photo_view(request,user,  pk):
+    photo = Photo.objects.get(pk=pk)
+    album = photo.album
+    photo.delete()
+    return redirect(reverse('photos', args=[user, album.pk]))
+
+
+def delete_album_view(request, user, pk):
+    album = Album.objects.get(pk=pk)
+    album.delete()
+    return redirect(reverse('albums', args=[user]))

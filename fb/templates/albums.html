@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block content %}
+    {% if user == profile.user %}
+        <a class="btn btn-primary btn-like" href="{% url 'add_album' user.username %}">Add New Album</a>
+    {% endif %}
+    <br>
+    <br>
+    {% for album in albums %}
+        <a href="{% url 'photos' user.username album.pk %}">{{ album.album_name }}</a>
+        <a class="btn btn-primary btn-like" href="{% url 'delete_album' user.username album.pk  %}">Delete Album</a>
+        <br>
+        {{ album.album_date }}
+        <br>
+    {% endfor %}
+{% endblock %}
