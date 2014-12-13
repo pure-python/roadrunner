@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
 
 from fb.models import UserPost, UserPostComment, UserProfile
 from fb.forms import (
@@ -138,3 +139,29 @@ def like_view(request, pk):
     post.likers.add(request.user)
     post.save()
     return redirect(reverse('post_details', args=[post.pk]))
+
+
+@login_required
+def view_users(request):
+    users = User.objects.all()
+    if request.method == 'GET':
+        context = {
+            'users': users,
+        }
+    
+    return render(request, 'view_users.html', context)
+
+@login_required
+def invite_view(request,pk):
+    if request.method == 'GET':
+        user1 = request.user
+        user2 = User.objects.get(pk=pk)
+        user1.profile.friends.add(user2)
+        user2.profile.friends.add(user1)
+        user1.profile.save()
+        user2.profile.save()
+    users = User.objects.all()
+    context = {
+            'users': users,
+        }
+    return render(request, 'view_users.html', context)

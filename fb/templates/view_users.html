@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <h1>All users</h1>
+  <div class="users">
+     {% for u in users %}
+       <div class="media">
+         <a class="media-left" href="#">
+            <img src="{{ u.profile.avatar_url }}">
+         </a>
+         <div class="media-body">
+            <h4 class="media-heading">
+               <a href="{% url 'profile' u.username %}">
+                  <b>{{ u.username }}</b>
+                  {% if u != user %}
+                     <a class="btn btn-primary btn-like" href="{% url 'invite_view' u.pk %}">Add friend</a>
+                  {% endif %}
+               </a>
+            </h4>
+          </div>
+        </div>
+         
+         {% endfor %}
+    </div>
+{% endblock %}
