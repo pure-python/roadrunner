@@ -166,6 +166,20 @@ def invite_view(request,pk):
         }
     return render(request, 'view_users.html', context)
 
+@login_required
+def delete_view(request,pk):
+    if request.method == 'GET':
+        user1 = request.user
+        user2 = User.objects.get(pk=pk)
+        user1.profile.friends.remove(user2)
+        user2.profile.friends.remove(user1)
+        user1.profile.save()
+        user2.profile.save()
+    users = User.objects.all()
+    context = {
+            'users': users,
+        }
+    return render(request, 'view_users.html', context)
 
 @login_required
 def view_friends(request):

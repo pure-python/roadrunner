@@ -12,6 +12,7 @@
             <h4 class="media-heading">
                <a href="{% url 'profile' friend.username %}">
                   <b>{{ friend.username }}</b></a>
+                  <a class="btn btn-primary btn-like" href="{% url 'delete_view' friend.pk %}">Delete friend</a>
             </h4>
           </div>
         </div>
