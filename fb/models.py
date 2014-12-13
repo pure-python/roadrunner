@@ -52,6 +52,12 @@ class UserProfile(models.Model):
             else static(settings.AVATAR_DEFAULT)
 
 
+class Album(models.Model):
+    name = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, related_name='albums')
+
+
 @receiver(post_save, sender=User)
 def callback(sender, instance, *args, **kwargs):
     if not hasattr(instance, 'profile'):
