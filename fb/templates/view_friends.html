@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <h1>My friends</h1>
+  <div class="friends">
+     {% for friend in friends %}
+       <div class="media">
+         <a class="media-left" href="#">
+            <img src="{{ friend.profile.avatar_url }}">
+         </a>
+         <div class="media-body">
+            <h4 class="media-heading">
+               <a href="{% url 'profile' friend.username %}">
+                  <b>{{ friend.username }}</b></a>
+                  <a class="btn btn-primary btn-like" href="{% url 'delete_view' friend.pk %}">Delete friend</a>
+            </h4>
+          </div>
+        </div>
+         {% endfor %}
+    </div>
+{% endblock %}

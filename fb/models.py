@@ -46,6 +46,7 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='images/', blank=False, null=True)
 
     user = models.OneToOneField(User, related_name='profile')
+    friends = models.ManyToManyField(User, related_name='friends')
 
     @property
     def avatar_url(self):

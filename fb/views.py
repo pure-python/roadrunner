@@ -142,6 +142,70 @@ def like_view(request, pk):
 
 
 @login_required
+def view_users(request):
+    users = User.objects.all()
+    if request.method == 'GET':
+        context = {
+            'users': users,
+        }
+
+    return render(request, 'view_users.html', context)
+
+@login_required
+def invite_view(request,pk):
+    if request.method == 'GET':
+        user1 = request.user
+        user2 = User.objects.get(pk=pk)
+        user1.profile.friends.add(user2)
+        user2.profile.friends.add(user1)
+        user1.profile.save()
+        user2.profile.save()
+    users = User.objects.all()
+    context = {
+            'users': users,
+        }
+    return render(request, 'view_users.html', context)
+
+@login_required
+def delete_view(request,pk):
+    if request.method == 'GET':
+        user1 = request.user
+        user2 = User.objects.get(pk=pk)
+        user1.profile.friends.remove(user2)
+        user2.profile.friends.remove(user1)
+        user1.profile.save()
+        user2.profile.save()
+    users = User.objects.all()
+    context = {
+            'users': users,
+        }
+    return render(request, 'view_users.html', context)
+
+@login_required
+def view_friends(request):
+    friends = request.user.profile.friends.all()
+    if request.method == 'GET':
+        context = {
+            'friends': friends,
+        }
+
+    return render(request, 'view_friends.html', context)
+
+
+@login_required
+def delete_post_view(request, pk):
+    post = UserPost.objects.get(pk=pk)
+    post.delete()
+    return redirect(reverse('index'))
+
+
+def delete_comment_view(request, pk):
+    comment = UserPostComment.objects.get(pk=pk)
+    post_pk = comment.post.pk
+    comment.delete()
+    return redirect(reverse('post_details',args=[post_pk]))
+
+
 def album_view(request, user):
     albums = Album.objects.filter(user__username=user)
     profile = UserProfile.objects.get(user__username=user)
