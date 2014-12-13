@@ -12,6 +12,8 @@
     <br>
     {% for photo in photos.all %}
         <img width="200px" src="{{ photo.photo.url }}"/>
+        <a class="btn btn-primary btn-like" href="{% url 'delete' user.username photo.pk  %}">Delete Photo</a>
+        <br>
     {% endfor %}
 
 {% endblock %}

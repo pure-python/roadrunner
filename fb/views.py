@@ -159,9 +159,11 @@ def new_album_view(request, user):
         form = AlbumForm(request.POST)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            album = Album(album_name=cleaned_data['album_name'],
-                          album_date=cleaned_data['album_date'],
-                          )
+            album = Album()
+            if cleaned_data['album_name']:
+                album.album_name = cleaned_data['album_name']
+            if cleaned_data['album_date']:
+                album.album_date = cleaned_data['album_date']
             album.user = User.objects.get(username=user)
             album.save()
             return redirect(reverse('albums', args=[user]))
@@ -173,7 +175,6 @@ def new_album_view(request, user):
 
 def photos_view(request, user, pk):
     photos = Photo.objects.filter(album__id=pk)
-    # profile = UserProfile.objects.get(user__username=user)
     context = {
         'photos': photos,
 
@@ -199,3 +200,16 @@ def add_photos_view(request, user, pk):
         'photos': album.photos,
     }
     return render(request, 'photos.html', context)
+
+
+def delete_photo_view(request,user,  pk):
+    photo = Photo.objects.get(pk=pk)
+    album = photo.album
+    photo.delete()
+    return redirect(reverse('photos', args=[user, album.pk]))
+
+
+def delete_album_view(request, user, pk):
+    album = Album.objects.get(pk=pk)
+    album.delete()
+    return redirect(reverse('albums', args=[user]))

@@ -54,7 +54,7 @@ class UserProfile(models.Model):
 
 
 class Album(models.Model):
-    album_name = models.CharField(max_length=200, default="New Album")
+    album_name = models.CharField(max_length=200, default='New Album')
     album_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, related_name='albums')
 
