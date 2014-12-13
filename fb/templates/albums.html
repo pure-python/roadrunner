@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block content %}
+    {% if user == profile.user %}
+    <a href="{% url 'add_album' user.username %}">New Album</a>
+    {% endif %}
+    <br>
+    {% for album in albums %}
+        <a href="{% url 'photos' user.username album.pk %}">{{ album.album_name }}</a>
+        <br>
+    {% endfor %}
+{#     {% for album in albums %}#}
+{#         {{ album.album_name }}#}
+{#         {{ album.album_date }}#}
+{#    {% endfor %}#}
+{% endblock %}

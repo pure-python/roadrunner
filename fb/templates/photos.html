@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form }}
+      <tr>
+        <td>
+          <button type="submit">AddPhoto</button>
+        </td>
+      </tr>
+    </form>
+    <br>
+    {% for photo in photos.all %}
+        <img width="200px" src="{{ photo.photo.url }}"/>
+    {% endfor %}
+
+{% endblock %}

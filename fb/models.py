@@ -54,10 +54,14 @@ class UserProfile(models.Model):
 
 
 class Album(models.Model):
-    name = models.CharField(max_length=200)
-    date = models.DateTimeField(auto_now_add=True)
+    album_name = models.CharField(max_length=200, default="New Album")
+    album_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, related_name='albums')
 
+
+class Photo(models.Model):
+    photo = models.ImageField(upload_to='images/', blank=False, null=True)
+    album = models.ForeignKey(Album, related_name='photos')
 
 @receiver(post_save, sender=User)
 def callback(sender, instance, *args, **kwargs):
